@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+    <script>
+      var app=angular.module("myapp",[]);
+      app.controller("myctrl",function($scope,$http){
+        $scope.getweather=function(city){
+        $http({
+          method:'GET',
+          url:'https://api.openweathermap.org/data/2.5/forecast?q='+city+'&appid=96dea4748c706dbd239acaf5fccee21a&units=imperial&mode=json'
+
+        }).then(
+          function(response){
+            $scope.country=response.data.city.country;
+            $scope.desc=response.data.list[1].weather[0].description;
+            $scope.tem=response.data.list[1].main.temp;
+            $scope.tem+=" F";
+            $scope.wind="Wind Speed: "+response.data.list[1].wind.speed;
+            let i=0;
+            while(1){
+
+              if(response.data.list[i].dt_txt.substring(8,10)!=response.data.list[i+1].dt_txt.substring(8,10)){
+                i+=1;
+              $scope.nexday1=response.data.list[i].dt_txt.substring(0,10);
+              $scope.nexday1min="Min "+response.data.list[i].main.temp_min+" F";
+              $scope.nexday1max="Max "+response.data.list[i].main.temp_max+" F";
+              $scope.day1desc=response.data.list[i].weather[0].description;
+              break;
+            }
+            i+=1;
+            }
+
+            while(1){
+
+              if(response.data.list[i].dt_txt.substring(8,10)!=response.data.list[i+1].dt_txt.substring(8,10)){
+                i+=1;
+            $scope.nexday2=response.data.list[i].dt_txt.substring(0,10);
+            $scope.nexday2min="Min "+response.data.list[i].main.temp_min+" F";
+            $scope.nexday2max="Max "+response.data.list[i].main.temp_max+" F";
+            $scope.day2desc=response.data.list[i].weather[0].description;
+            break;
+          }
+          i+=1;
+          }
+          while(1){
+
+            if(response.data.list[i].dt_txt.substring(8,10)!=response.data.list[i+1].dt_txt.substring(8,10)){
+              i+=1;
+            $scope.nexday3=response.data.list[i].dt_txt.substring(0,10);
+            $scope.nexday3min="Min "+response.data.list[i].main.temp_min+" F";
+            $scope.nexday3max="Max "+response.data.list[i].main.temp_max+" F";
+            $scope.day3desc=response.data.list[i].weather[0].description;
+            break;
+          }
+          i+=1;
+          }
+          });
+          $scope.ci=city+', ';
+        };
+      });
+    </script>
+    <title>BCS193147</title>
+    <style>
+      body{
+        background-color:#110031;
+        margin:5px 10px;
+      }
+      input{
+        margin:0;
+        border:none;
+        border-radius:15px;
+        background-color:#353b48;
+        color:#e1e2e3;
+        font-size:18px;
+      }
+      input:focus{
+        outline:none;
+      }
+      .container{
+        float:left;
+        border-radius:15px;
+        background-color:#353b48;
+        padding:15px;
+      }
+      button{
+        border:none;
+        border-radius:15px;
+        background-color:#353b48;
+      }
+    </style>
+  </head>
+  <body ng-app="myapp">
+    <div ng-controller="myctrl">
+      <div class="">
+        <img class="" src="https://ssl.gstatic.com/onebox/weather/64/partly_cloudy.png" alt="">
+        <img style="float:right" src="https://ssl.gstatic.com/onebox/weather/64/partly_cloudy.png" alt="">
+      </div>
+      <br><br>
+      <div style="display:flex;justify-content:center">
+
+      <div class="container">
+        <input type="text" ng-model='city'name="" value="">
+        <button style="font-size:18px;color:white" type="button" ng-click='getweather(city)'name="button">Search</button>
+      </div>
+    </div>
+    <br>
+    <div style="background-color:#1e103a;border-radius:15px;">
+
+    <div style="display:flex;justify-content:center;height:40px;padding-top:10px;">
+    <span style="color:#0178fa;font-size:25px;padding-top:5px;">{{ci}}{{country}}</span>
+    </div>
+    <hr style="width:40%;border:1px solid #279c44">
+
+      <div style="display:flex;justify-content:center;height:40px;">
+      <span style="color:#279c44;font-size:25px;padding-top:5px;">{{desc}}</span>
+    </div>
+    <hr style="width:30%;border:1px solid #dba40e">
+
+    <div style="display:flex;justify-content:center;height:40px;">
+      <span style="color:#dba40e;font-size:25px;padding-top:0px;">{{tem}}</span>
+    </div>
+    <hr style="width:20%;border:1px solid #1796ad">
+
+    <div style="display:flex;justify-content:center;height:40px;">
+      <span style="color:#1796ad;font-size:25px;padding-top:0px;">{{wind}}</span>
+    </div>
+
+  </div>
+<div style="display:flex;justify-content:center;">
+  <div style="float:left;background-color:#1e103a;border-radius:15px;margin-top:20px;width:15%;margin-right:20px;">
+    <img  style="width:40px;height:40px;"src="https://ssl.gstatic.com/onebox/weather/64/thunderstorms.png" alt="">
+<hr style="border:1px solid #3a0b4d;">
+    <div style="display:flex;justify-content:center;height:20px;">
+      <span style="color:#1796ad;font-size:20px;padding:0px 20px;">{{nexday1}}</span>
+    </div>
+    <hr style="border:1px solid #22673d; width:20%;">
+    <div style="display:flex;justify-content:center;">
+    <span style="text-align:center;color:white;font-size:15px;">{{nexday1min}}</span>
+  </div>
+  <br>
+  <div style="display:flex;justify-content:center;font-size:15px;">
+  <span style="text-align:center;color:white">{{nexday1max}}</span>
+</div>
+<hr style="border:1px solid #dda60f; width:40%;">
+<div style="display:flex;justify-content:center;font-size:20px;">
+<span style="text-align:center;color:#179ab1;">{{day1desc}}</span>
+</div>
+  </div>
+
+
+  <div style="float:left;background-color:#1e103a;border-radius:15px;margin-top:20px;width:15%;margin-right:20px;">
+    <img  style="width:40px;height:40px;"src="https://ssl.gstatic.com/onebox/weather/64/cloudy.png" alt="">
+<hr style="border:1px solid #3a0b4d;">
+    <div style="display:flex;justify-content:center;height:20px;">
+      <span style="color:#1796ad;font-size:20px;padding:0px 20px;">{{nexday2}}</span>
+    </div>
+    <hr style="border:1px solid #22673d; width:20%;">
+    <div style="display:flex;justify-content:center;">
+    <span style="text-align:center;color:white;font-size:15px;">{{nexday2min}}</span>
+  </div>
+  <br>
+  <div style="display:flex;justify-content:center;font-size:15px;">
+  <span style="text-align:center;color:white">{{nexday2max}}</span>
+</div>
+<hr style="border:1px solid #dda60f; width:40%;">
+<div style="display:flex;justify-content:center;font-size:20px;">
+<span style="text-align:center;color:#179ab1;">{{day2desc}}</span>
+</div>
+  </div>
+
+  <div style="float:left;background-color:#1e103a;border-radius:15px;margin-top:20px;width:15%;margin-right:20px;">
+    <img  style="width:40px;height:40px;"src="https://ssl.gstatic.com/onebox/weather/48/rain_s_cloudy.png" alt="">
+<hr style="border:1px solid #3a0b4d;">
+    <div style="display:flex;justify-content:center;height:20px;">
+      <span style="color:#1796ad;font-size:20px;padding:0px 20px;">{{nexday3}}</span>
+    </div>
+    <hr style="border:1px solid #22673d; width:20%;">
+    <div style="display:flex;justify-content:center;">
+    <span style="text-align:center;color:white;font-size:15px;">{{nexday3min}}</span>
+  </div>
+  <br>
+  <div style="display:flex;justify-content:center;font-size:15px;">
+  <span style="text-align:center;color:white">{{nexday3max}}</span>
+</div>
+<hr style="border:1px solid #dda60f; width:40%;">
+<div style="display:flex;justify-content:center;font-size:20px;">
+<span style="text-align:center;color:#179ab1;">{{day3desc}}</span>
+</div>
+  </div>
+</div>
+
+    </div>
+  </body>
+</html>
